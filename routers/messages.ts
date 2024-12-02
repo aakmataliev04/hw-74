@@ -3,8 +3,20 @@ import {promises as fs} from 'fs';
 
 const messagesRouter = express.Router();
 
+interface Message {
+  message: string;
+}
+
 messagesRouter.get("/", async (req: express.Request, res: express.Response) => {
-  res.send('Messages');
+  const path = './messages';
+  const files = await fs.readdir(path);
+
+  const result = await Promise.all(files.slice(-5).map(async (fileName) => {
+    const messageContent = await fs.readFile(`${path}/${fileName}`);
+    return await JSON.parse(messageContent.toString()) as Message
+  }));
+
+  res.send(result);
 })
 messagesRouter.post("/", async (req: express.Request, res: express.Response) => {
 
