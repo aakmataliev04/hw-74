@@ -13,11 +13,11 @@ messagesRouter.get("/", async (req: express.Request, res: express.Response) => {
 
   const result = await Promise.all(files.slice(-5).map(async (fileName) => {
     const messageContent = await fs.readFile(`${path}/${fileName}`);
-    return await JSON.parse(messageContent.toString()) as Message
+    return await JSON.parse(messageContent.toString()) as Message;
   }));
 
   res.send(result);
-})
+});
 messagesRouter.post("/", async (req: express.Request, res: express.Response) => {
 
   const dateTime = new Date().toISOString();
@@ -26,6 +26,6 @@ messagesRouter.post("/", async (req: express.Request, res: express.Response) => 
 
   await fs.writeFile(`./messages/${dateTime}.txt`, JSON.stringify(messageText));
   res.send(message);
-})
+});
 
 export default messagesRouter;
